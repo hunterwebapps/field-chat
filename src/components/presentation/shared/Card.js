@@ -10,7 +10,7 @@ function Card ({ children, title, className, padding = true }) {
     return (
         <div className={`card ${ className }`}>
             {title &&
-                <div className="card-header d-flex align-items-center">
+                <div className="card-header d-flex">
                     {title}
                 </div>
             }

@@ -14,7 +14,6 @@ function* RequestErrorSaga ({ payload: { action, message, exception } }) {
 
     if (errorCount > 10) {
         toastr.error('Loading Error', 'Could not complete request. Please check your internet and try refreshing.')
-
         throw new Error(`Message: ${ exception.message }, Action: ${ JSON.stringify(action) }`)
     }
 

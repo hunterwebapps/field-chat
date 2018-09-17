@@ -1,7 +1,7 @@
 import * as TYPES from './messages.types'
 import { takeLatest, call, put, select } from 'redux-saga/effects'
 import { Messages } from '../../api'
-import { SetMessages, GetMessages, AllMessagesLoaded } from './messages.actions'
+import { SetMessages, GetMessages, AllMessagesLoaded, LoadingMessages } from './messages.actions'
 import { RequestError } from '../shared/shared.actions'
 import { SelectLastMessage } from '../../main.reducer'
 
@@ -10,6 +10,8 @@ export default [
 ]
 
 function* GetMessagesSaga ({ payload: limit }) {
+    yield put(LoadingMessages(true))
+
     const lastDoc = yield select(SelectLastMessage)
 
     const res = yield call(Messages.LoadMore, lastDoc && lastDoc.doc, limit)
@@ -25,9 +27,8 @@ function* GetMessagesSaga ({ payload: limit }) {
             messages.push(message)
         })
 
-        if (messages.length < limit) {
+        if (messages.length < limit)
             yield put(AllMessagesLoaded())
-        }
 
         yield put(SetMessages(messages))
     } else {
@@ -35,6 +36,10 @@ function* GetMessagesSaga ({ payload: limit }) {
             RequestError(
                 GetMessages(limit),
                 'Could Not Retrieve Messages, Retrying...',
-                { message: res.message }))
+                new Error(res.message)
+            )
+        )
     }
+
+    yield put(LoadingMessages(false))
 }

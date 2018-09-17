@@ -37,6 +37,8 @@ export const SelectFilteredMessages = state =>
 
 export const SelectAllMessagesLoaded = state => state.messages.allLoaded
 
+export const SelectMessagesLoading = state => state.messages.loading
+
 // Router
 
 export const SelectRouterLocation = state => state.router.location

@@ -5,7 +5,7 @@ let authToken = localStorage.getItem('auth-token') || sessionStorage.getItem('au
 let authUsername = localStorage.getItem('username') || sessionStorage.getItem('username')
 
 export const Users = {
-    IsLoggedIn: () => (authToken && authUsername) !== null,
+    IsLoggedIn: () => (authToken && authUsername) ? true : false,
     Login: async loginModel => {
         if (loginModel) {
             const { username, password, rememberMe } = loginModel
@@ -21,17 +21,23 @@ export const Users = {
             const res = await axios.get('/default/FCCodeTestAuth', {
                 headers: { Authorization: `Basic ${ authToken }` }
             }).catch(err => err)
-            if (res && res.data && res.data.includes('Authenticated'))
+
+            if (res && res.status === 200) {
+                axios.defaults.headers.common['Authorization'] = `Basic ${ authToken }`
                 return {
                     status: 200,
                     data: { username: authUsername }
                 }
+            }
+
+            Users.Logout()
+            return {
+                status: 401,
+                message: 'Failed to authenticate user'
+            }
         }
 
-        return {
-            status: 400,
-            message: 'Failed to authenticate user'
-        }
+        return { status: 204 }
     },
     Logout: async () => {
         authToken = null
@@ -47,7 +53,7 @@ export const Users = {
 export const Messages = {
     Get: async messageId =>
         await db.collection('messages').doc(messageId).get(),
-    LoadMore: async (lastDoc, limit = 8) => {
+    LoadMore: async (lastDoc, limit) => {
         let query = db.collection('messages').orderBy('created_at', 'desc')
 
         if (lastDoc) query = query.startAfter(lastDoc)

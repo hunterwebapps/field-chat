@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Users } from '../../store/api'
 import { SelectActiveUser } from '../../store/main.reducer'
 import { Logout } from '../../store/modules/users/users.actions'
 
@@ -23,11 +22,7 @@ function Layout ({ user, Logout, children }) {
             </header>
             <div className="d-flex">
                 <nav className="p-3">
-                    <Sidebar
-                        user={user}
-                        loggedIn={Users.IsLoggedIn()}
-                        logout={Logout}
-                    />
+                    <Sidebar user={user} logout={Logout} />
                 </nav>
                 <main className="flex-grow-1 p-5">
                     {children}

@@ -1,22 +1,23 @@
 import React from 'react'
-import { bool, func, object } from 'prop-types'
+import { func, object } from 'prop-types'
 import { LinkContainer } from 'react-router-bootstrap'
+
+import UserLabel from '../shared/UserLabel'
 
 Sidebar.displayName = 'Sidebar'
 
 Sidebar.propTypes = {
-    loggedIn: bool.isRequired,
     logout: func.isRequired,
     user: object
 }
 
-function Sidebar ({ user, loggedIn, logout }) {
+function Sidebar ({ user, logout }) {
     return (
         <React.Fragment>
-            <label>{user.username || 'Anonymous'}</label>
+            <UserLabel username={user.username} />
             <ul className="list-group">
                 <ul>
-                    {loggedIn ?
+                    {user.username ?
                         <React.Fragment>
                             <LinkContainer to="/Messages">
                                 <li className="list-group-item clickable">

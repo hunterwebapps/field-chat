@@ -11,24 +11,22 @@ export default [
     takeLatest(TYPES.LOGOUT, LogoutSaga)
 ]
 
-function* LoginSaga ({ payload: loginModel, meta }) {
+function* LoginSaga ({ payload: loginModel, meta: formik }) {
     const res = yield call(Users.Login, loginModel)
 
     if (res && res.status === 200) {
         yield put(SetUser(res.data))
 
         const location = yield select(SelectRouterLocation)
-        if (location.state && location.state.from) {
-            yield put(push(location.state.from))
-            return
-        }
+        if (location.state && location.state.from)
+            return yield put(push(location.state.from))
 
         yield put(push('/Messages'))
-    } else {
+    } else if (res && res.status === 401) {
         toastr.error('Invalid Credentials', 'Wrong username and/or password')
     }
 
-    meta && meta.setSubmitting(false)
+    formik && formik.setSubmitting(false)
 }
 
 function* LogoutSaga () {

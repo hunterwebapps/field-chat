@@ -1,14 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { GetMessages, FilterMessages } from '../../store/modules/messages/messages.actions'
-import { SelectFilteredMessages, SelectAllMessagesLoaded } from '../../store/main.reducer'
+import { SelectFilteredMessages, SelectMessagesLoading, SelectAllMessagesLoaded } from '../../store/main.reducer'
 import throttle from 'lodash/throttle'
 
-import MessageCard from '../presentation/messages/MessageCard'
+import MessagesList from '../presentation/messages/MessagesList'
 import FilterBox from '../presentation/shared/FilterBox'
 
 const mapStateToProps = state => ({
     messages: SelectFilteredMessages(state),
+    loading: SelectMessagesLoading(state),
     allLoaded: SelectAllMessagesLoaded(state)
 })
 
@@ -32,7 +33,7 @@ class Messages extends React.Component {
 
             this.props.GetMessages(8)
         }
-    }, 500)
+    }, 200)
 
     componentWillUnmount () {
         window.removeEventListener('scroll', this.loadInfinitely)
@@ -42,6 +43,7 @@ class Messages extends React.Component {
         const {
             messages,
             FilterMessages,
+            loading,
             allLoaded
         } = this.props
 
@@ -50,14 +52,12 @@ class Messages extends React.Component {
                 <div className="w-25 mb-3">
                     <FilterBox filterChanged={FilterMessages} />
                 </div>
-                {messages.map(msg =>
-                    <div key={msg.id} className="row col-12">
-                        <div className=" w-50 mb-3">
-                            <MessageCard message={msg} />
-                        </div>
-                    </div>
-                )}
-                {!allLoaded && <div className="lds-ring"><div></div><div></div><div></div><div></div></div>}
+                <div className="w-50">
+                    <MessagesList messages={messages} />
+                </div>
+                {loading && !allLoaded &&
+                    <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
+                }
             </React.Fragment>
         )
     }

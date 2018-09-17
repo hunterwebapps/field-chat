@@ -3,6 +3,7 @@ import * as TYPES from './messages.types'
 const initialState = {
     all: [],
     filter: '',
+    loading: true,
     allLoaded: false
 }
 
@@ -18,6 +19,12 @@ export default (state = initialState, { type, payload }) => {
             state = {
                 ...state,
                 filter: payload
+            }
+            return state
+        case TYPES.LOADING_MESSAGES:
+            state = {
+                ...state,
+                loading: payload
             }
             return state
         case TYPES.ALL_MESSAGES_LOADED:

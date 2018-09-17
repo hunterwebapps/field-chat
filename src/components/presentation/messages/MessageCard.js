@@ -9,13 +9,14 @@ MessageCard.propTypes = {
 }
 
 function MessageCard ({ message }) {
+    const timeString = new Date(message.created_at.seconds * 1000).toLocaleTimeString()
     return (
-        <Card className="message-card">
+        <Card className="message-card mb-3">
             <span className="username">
                 {message.sender_username}
             </span>
             <span className="time-sent float-right">
-                {new Date(message.created_at.seconds * 1000).toLocaleTimeString()}
+                {timeString}
             </span>
             <div className="message" dangerouslySetInnerHTML={{ __html: message.body }} />
         </Card>

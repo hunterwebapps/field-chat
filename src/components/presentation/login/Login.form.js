@@ -53,7 +53,11 @@ function LoginForm ({
             </button>
 
             {showRegister &&
-                <button type="button" className="btn btn-default">
+                <button
+                    onClick={showRegister}
+                    type="button"
+                    className="btn btn-default"
+                >
                     {'Register'}
                 </button>
             }

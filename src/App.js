@@ -23,7 +23,6 @@ class App extends React.Component {
 
     render () {
         return (
-
             <React.Fragment>
                 <Toastr />
                 <Switch>
@@ -34,10 +33,10 @@ class App extends React.Component {
                         authCheck={Users.IsLoggedIn}
                         redirectTo="/"
                     />
-                    <Route render={props =>
+                    <Route render={() =>
                         <Redirect to={{
                             pathname: '/',
-                            state: { from: props.location, error: 404 }
+                            state: { error: 404 }
                         }} />
                     } />
                 </Switch>

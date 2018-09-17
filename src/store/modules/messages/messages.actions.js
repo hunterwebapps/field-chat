@@ -1,6 +1,6 @@
 import * as TYPES from './messages.types'
 
-export const GetMessages = limit => ({
+export const GetMessages = (limit = 8) => ({
     type: TYPES.GET_MESSAGES,
     payload: limit
 })
@@ -17,4 +17,9 @@ export const FilterMessages = searchText => ({
 
 export const AllMessagesLoaded = () => ({
     type: TYPES.ALL_MESSAGES_LOADED
+})
+
+export const LoadingMessages = loading => ({
+    type: TYPES.LOADING_MESSAGES,
+    payload: loading
 })
